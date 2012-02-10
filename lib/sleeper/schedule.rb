@@ -1,32 +1,72 @@
 module Sleeper
-  # TODO: Need to figure out how to handle keyed vs non-keyed schedules
-  class Schedule
-    attr_reader :schedule, :pos
-
-    def initialize(schedule, recycle=false)
-      
+  class Cycle
+    def initialize(values, recycle=false)
+      @values = values
+      @index = LoopableRange.new(0, values.length - 1, cyclic: recycle)
     end
 
-
-    private
-
-    def hash_sched(schedule)
-      
+    def next
+      @values[@index.succ]
     end
 
-    def array_sched(schedule)
-      x = 0
+    def current
+      @values[index]
+    end
 
-      schedule.inject({}) do |schedule, value|
-        if value.respond_to? :length
-          value.length > 1 ? schedule[value[0]] = value[1..-1] : schedule[x] = value
+    def index
+      @index.position
+    end
+
+    def reset
+      @index.reset
+    end
+
+    class LoopableRange
+      include Enumerable
+
+      attr_reader :position
+
+      def initialize(start, finish, opts={})
+        @start = start
+        @finish = finish
+        @cyclic = opts[:cyclic] || false
+        @position = opts[:position] || start
+      end
+      
+      def succ
+        if cyclic?
+          @position = @position == @finish ? @start : @position += 1
         else
-          schedule[x] = value
+          @position = @position == @finish ? @finish : @position += 1
+        end
+      end
+
+      def prev
+        if cyclic?
+          @position = @position == @start ? @finish : @position -= 1
+        else
+          @position = @position == @start ? @start : @position -= 1
+        end
+      end
+
+      def cyclic?
+        @cyclic
+      end
+
+      def reset
+        @position = @start
+      end
+
+      # This isn't quite correct.
+      def each
+        @position = @start
+
+        while @position < @finish
+          yield @positon
+          self.succ
         end
 
-        x += 1
-
-        schedule
+        yield @position
       end
     end
   end
