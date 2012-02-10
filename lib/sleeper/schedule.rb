@@ -1,5 +1,5 @@
 module Sleeper
-  class Cycle
+  class Schedule
     def initialize(values, recycle=false)
       @values = values
       @index = LoopableRange.new(0, values.length - 1, cyclic: recycle)
