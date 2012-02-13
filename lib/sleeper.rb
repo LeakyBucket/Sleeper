@@ -1,2 +1,2 @@
 require 'sleeper/schedule'
-require 'sleeper/cycle'
+require 'sleeper/timer'
