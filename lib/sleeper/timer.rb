@@ -5,14 +5,15 @@ module Sleeper
 
     def initialize(schedule, cyclic=false)
       @cyclic = cyclic
-      hash_sched(schedule) if schedule.class == Hash
-      array_sched(schedule) if schedule.class == Array
+      from_hash(schedule) if schedule.class == Hash
+      from_array(schedule) if schedule.class == Array
     end
+
 
 
     private
 
-    def hash_sched(schedule)
+    def from_hash(schedule)
       @schedule = {}
 
       schedule.each_pair do |key, values|
@@ -20,7 +21,7 @@ module Sleeper
       end
     end
 
-    def array_sched(schedule)
+    def from_array(schedule)
       @schedule = Schedule.new schedule, @cyclic
     end
   end
