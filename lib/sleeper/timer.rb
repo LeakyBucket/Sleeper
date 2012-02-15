@@ -1,5 +1,5 @@
 module Sleeper
-  # TODO: Need to figure out how to handle keyed vs non-keyed schedules
+  # TODO: StateMachine?
   class Timer
     attr_reader :schedule
 
@@ -9,7 +9,21 @@ module Sleeper
       from_array(schedule) if schedule.class == Array
     end
 
+    # TODO: Should raise exception if @schedule[key] is nil
+    def run(&block)
+      if block_given?
+        key = block.call
+        sleep(@schedule[key].current)
+        @schedule[key].next
+      else
+        sleep(@schedule.current)
+        @schedule.next
+      end
+    end
 
+    def reset(key=nil)
+      key.nil? ?  @schedule.reset : @schedule[key].reset
+    end
 
     private
 

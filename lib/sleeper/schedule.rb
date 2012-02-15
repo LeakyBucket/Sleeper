@@ -13,6 +13,12 @@ module Sleeper
       @values[index]
     end
 
+    def last
+      index == 0 ? prev = 0 : prev = index - 1
+
+      @values[prev]
+    end
+
     def index
       @index.position
     end
