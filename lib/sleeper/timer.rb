@@ -1,10 +1,12 @@
 module Sleeper
   # TODO: StateMachine?
+  # TODO: Need to be able to add and remove schedules?
   class Timer
-    attr_reader :schedule
+    attr_reader :schedule, :default
 
-    def initialize(schedule, cyclic=false)
-      @cyclic = cyclic
+    def initialize(schedule, opts={})
+      @cyclic = opts[:cyclic] || false
+      @default = opts[:default] || nil
       from_hash(schedule) if schedule.class == Hash
       from_array(schedule) if schedule.class == Array
     end
@@ -20,12 +22,16 @@ module Sleeper
         sleep(@schedule.current)
         @schedule.next
       end
-      # TODO: Currently returning next value.  That should be changed.
+      # TODO: Currently returning next value.  That should be changed to be the value slept for.
     end
 
     # TODO: Hash reset should be separate method and should handle entire hash or specific keys.
     def reset(key=nil)
-      key.nil? ?  @schedule.reset : @schedule[key].reset
+      key.nil? ? @schedule.reset : @schedule[key].reset
+    end
+
+    def default=(value)
+      value.nil? ? @default = nil : @default = Schedule.new(Array(value), @cyclic)
     end
 
     private

@@ -57,6 +57,27 @@ describe 'Sleeper::Timer' do
     end
   end
 
+  describe "#default=" do
+    it "should set a schedule if given an array" do
+      schedule.default = [0, 12, 33]
+
+      schedule.default.should be_a Sleeper::Schedule
+    end
+
+    it "should set a schedule if given a single value" do
+      schedule.default = 8
+
+      schedule.default.should be_a Sleeper::Schedule
+    end
+
+    it "should set @default to nil if given nil" do
+      schedule.default = 8
+      schedule.default = nil
+
+      schedule.default.should be_nil
+    end
+  end
+
   describe "#from_hash" do
     it "should convert a hash to a schedule" do
       schedule.send(:from_hash, conditional)
