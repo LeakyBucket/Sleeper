@@ -10,6 +10,7 @@ module Sleeper
     end
 
     # TODO: Should raise exception if @schedule[key] is nil
+    # TODO: Need two separate method calls here for block or no block
     def run(&block)
       if block_given?
         key = block.call
@@ -19,6 +20,7 @@ module Sleeper
         sleep(@schedule.current)
         @schedule.next
       end
+      # TODO: Currently returning next value.  That should be changed.
     end
 
     def reset(key=nil)
