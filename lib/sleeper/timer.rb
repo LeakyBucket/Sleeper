@@ -9,7 +9,7 @@ module Sleeper
       from_array(schedule) if schedule.class == Array
     end
 
-    # TODO: Should raise exception if @schedule[key] is nil
+    # TODO: Should raise exception if @schedule[key] is nil or use default value
     # TODO: Need two separate method calls here for block or no block
     def run(&block)
       if block_given?
@@ -23,6 +23,7 @@ module Sleeper
       # TODO: Currently returning next value.  That should be changed.
     end
 
+    # TODO: Hash reset should be separate method and should handle entire hash or specific keys.
     def reset(key=nil)
       key.nil? ?  @schedule.reset : @schedule[key].reset
     end
