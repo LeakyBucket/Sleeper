@@ -82,6 +82,25 @@ end
 
 The above is a contrived example but hopefully you get the point.
 
+What happens if your block returns a value that isn't in your schedule:
+
+~~~~~
+timer = Sleeper::Timer.new({ 0 => [2000, 3000, 8000], 1 => [18000] })
+
+timer.run { 8 }
+~~~~~
+
+If you haven't set a default schedule then you will get a 'Missing Schedule' exception.  You can avoid this and set default behavior by doing the following:
+
+~~~~~
+timer = Sleeper::Timer.new({ 0 => [2000, 3000, 8000], 1 => [18000] }, default: [10, 12, 14])
+
+timer.run { 8 }
+=> 10
+~~~~~
+
+This makes it easy to create catch-all schedules.
+
 ----
 
 It is easy to reset a simple schedule so that it will start over at the first value:
