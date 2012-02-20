@@ -115,7 +115,7 @@ timer.run { 0 }
 => 10
 ~~~~~
 
-and on a universal type level:
+and on an object wide level:
 
 ~~~~~
 timer = Sleeper::Timer.new({ 0 => [10, 20, 30], 1 => [50, 60, 70] })
