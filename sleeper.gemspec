@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'sleeper'
-  s.version = '0.1.0'
+  s.version = '0.2.0'
   s.date = '2012-02-20'
   s.summary = 'Schedules'
   s.description = 'A small gem for variable sleep intervals'
