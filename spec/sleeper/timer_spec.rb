@@ -40,6 +40,18 @@ describe 'Sleeper::Timer' do
 
       (Time.now - time).to_i.should == timer.instance_eval { @schedule[:bob].last }
     end
+
+    it "should raise a Missing Schedule (runtime) error if the key doesn't exist and there is no default" do
+      timer = Sleeper::Timer.new conditional
+
+      expect {timer.run { :al }}.should raise_exception
+    end
+
+    it "should sleep according to the default schedule if the key doesn't exists and there is a default schedule" do
+      timer = Sleeper::Timer.new conditional, default: [10, 12, 18]
+
+      timer.run { :al }.should == 10
+    end
   end
 
   describe "#follow_schedule(schedule)" do

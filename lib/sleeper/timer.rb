@@ -4,9 +4,10 @@ module Sleeper
   class Timer
     attr_reader :schedule, :default
 
+    # TODO: Behavior here needs to be cleaned up.
     def initialize(schedule, opts={})
       @cyclic = opts[:cyclic] || false
-      @default = opts[:default] || nil
+      @default = from_array(opts[:default]) if opts[:default] || nil
       from_hash(schedule) if schedule.class == Hash
       from_array(schedule) if schedule.class == Array
     end
@@ -14,8 +15,9 @@ module Sleeper
     def run(&block)
       block_given? ? schedule = @schedule[block.call] : schedule = @schedule
       
-      # TODO: If schedule nil then use default or raise exception?
-      follow_schedule(schedule)
+      raise 'Missing Schedule' if schedule.nil? && @default.nil?
+
+      schedule.nil? ? follow_schedule(@default) : follow_schedule(schedule)
     end
 
     def follow_schedule(schedule)
@@ -27,7 +29,6 @@ module Sleeper
       period
     end
 
-    # TODO: Hash reset should be separate method and should handle entire hash or specific keys.
     def reset(key=nil)
       return @schedule[key].reset unless key.nil?
 
@@ -38,7 +39,6 @@ module Sleeper
       else
         @schedule.reset
       end
-      #key.nil? ? @schedule.reset : @schedule[key].reset
     end
 
     def default=(value)
