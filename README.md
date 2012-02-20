@@ -81,3 +81,59 @@ end
 ~~~~~
 
 The above is a contrived example but hopefully you get the point.
+
+----
+
+It is easy to reset a simple schedule so that it will start over at the first value:
+
+~~~~~
+timer = Sleeper::Timer.new [8, 12, 22]
+
+timer.run
+=> 8
+
+timer.run
+=> 12
+
+timer.reset
+
+timer.run
+=> 8
+~~~~~
+
+Resets are also possible when you have a keyed schedule, both on a per key level:
+
+~~~~~
+timer = Sleeper::Timer.new({ 0 => [10, 20], 1 => [50, 60] })
+
+timer.run { 0 }
+=> 10
+
+timer.reset(0)
+
+timer.run { 0 }
+=> 10
+~~~~~
+
+and on a universal type level:
+
+~~~~~
+timer = Sleeper::Timer.new({ 0 => [10, 20, 30], 1 => [50, 60, 70] })
+
+timer.run { 0 }
+=> 10
+
+timer.run { 0 }
+=> 20
+
+timer.run { 1 }
+=> 50
+
+timer.reset
+
+timer.run { 0 }
+=> 10
+
+timer.run { 1 }
+=> 50
+~~~~~

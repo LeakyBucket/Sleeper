@@ -58,12 +58,24 @@ describe 'Sleeper::Timer' do
       schedule.instance_eval { @schedule.index }.should == 0
     end
 
-    it "should reset the condition to the beginning if the schedule is a hash" do
+    it "should reset the condition to the beginning if the schedule is a hash and a key is provided" do
       timer = Sleeper::Timer.new conditional
       timer.run { :bob }
       timer.reset(:bob)
 
       timer.instance_eval { @schedule[:bob].index }.should == 0
+    end
+
+    it "should reset all schedules if schedule is a hash and no key is provided" do
+      timer = Sleeper::Timer.new conditional
+      timer.run { :bob }
+      timer.run { "no" }
+      timer.run { "no" }
+
+      timer.reset
+
+      timer.run { :bob }.should == 8
+      timer.run { "no" }.should == 22
     end
   end
 

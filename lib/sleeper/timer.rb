@@ -11,11 +11,10 @@ module Sleeper
       from_array(schedule) if schedule.class == Array
     end
 
-    # TODO: Should raise exception if @schedule[key] is nil or use default value
     def run(&block)
       block_given? ? schedule = @schedule[block.call] : schedule = @schedule
       
-      # TODO: If schedule nil then use default?
+      # TODO: If schedule nil then use default or raise exception?
       follow_schedule(schedule)
     end
 
@@ -30,7 +29,16 @@ module Sleeper
 
     # TODO: Hash reset should be separate method and should handle entire hash or specific keys.
     def reset(key=nil)
-      key.nil? ? @schedule.reset : @schedule[key].reset
+      return @schedule[key].reset unless key.nil?
+
+      if @schedule.class == Hash
+        @schedule.values.each do |schedule|
+          schedule.reset
+        end
+      else
+        @schedule.reset
+      end
+      #key.nil? ? @schedule.reset : @schedule[key].reset
     end
 
     def default=(value)
