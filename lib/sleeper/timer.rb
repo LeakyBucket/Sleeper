@@ -12,17 +12,20 @@ module Sleeper
     end
 
     # TODO: Should raise exception if @schedule[key] is nil or use default value
-    # TODO: Need two separate method calls here for block or no block
     def run(&block)
-      if block_given?
-        key = block.call
-        sleep(@schedule[key].current)
-        @schedule[key].next
-      else
-        sleep(@schedule.current)
-        @schedule.next
-      end
-      # TODO: Currently returning next value.  That should be changed to be the value slept for.
+      block_given? ? schedule = @schedule[block.call] : schedule = @schedule
+      
+      # TODO: If schedule nil then use default?
+      follow_schedule(schedule)
+    end
+
+    def follow_schedule(schedule)
+      period = schedule.current
+
+      sleep(period)
+      schedule.next
+
+      period
     end
 
     # TODO: Hash reset should be separate method and should handle entire hash or specific keys.

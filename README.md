@@ -2,7 +2,7 @@
 
 ## What is it?
 
-Sleeper is a very small library for handling variable sleep intervals.  It will handle a "list" of intervals or it will also handle conditional schedules.  It is also possible to specify whether a schedule is cyclic or not.
+Sleeper is a very small library for handling variable sleep intervals.  It will handle a "list" of intervals or it will also handle conditional schedules.  It is also possible to specify whether a schedule is cyclic or not.  Sleeper is a gem for those rare situations where you might want to wait for different periods of time.  It's probably most useful in situations where you want to sleep dependent on the result of some piece of code.
 
 ## Short How
 
@@ -46,10 +46,6 @@ timer.run { "fish" } # sleep for 30 seconds
 
 -----
 
-Sleeper is a gem for those rare situations where you might want to wait for different periods of time.  It's probably most useful in situations where you want to sleep dependent on the result of some piece of code.
-
------
-
 ## Long How
 
 You can setup a very simple sleep schedule by simply passing an array:
@@ -63,7 +59,7 @@ This would sleep for 10 seconds the first time it is run, 30 seconds the second 
 However, you can tell Sleeper to loop through your schedule.
 
 ~~~~~
-Sleeper::Timer.new [10, 30, 50], true
+Sleeper::Timer.new [10, 30, 50], cyclic: true
 ~~~~~
 
 The Timer object returned above will sleep for 10 seconds on the first run, 30 seconds on the second and 50 seconds on the third.  If it is asked to run again it will loop back to the beginning and sleep for 10 seconds again.

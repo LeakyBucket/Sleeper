@@ -21,6 +21,7 @@ describe 'Sleeper::Timer' do
     end
   end
 
+  # TODO: Test for default behavior when key doesn't exist
   describe "#run" do
     it "should sleep for the \"next\" time interval if non-conditional" do
       schedule.run
@@ -38,6 +39,15 @@ describe 'Sleeper::Timer' do
       timer.run { :bob }
 
       (Time.now - time).to_i.should == timer.instance_eval { @schedule[:bob].last }
+    end
+  end
+
+  describe "#follow_schedule(schedule)" do
+    it "should sleep for the current interval in the schedule and return the number of seconds slept" do
+      time = Time.now
+      period = schedule.follow_schedule(schedule.instance_eval { @schedule })
+
+      (Time.now - time).to_i.should == period
     end
   end
 
