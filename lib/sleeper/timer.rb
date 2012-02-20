@@ -1,5 +1,6 @@
 module Sleeper
   # TODO: StateMachine?
+  # TODO: Set cyclic attribute on a per key basis?
   # TODO: Need to be able to add and remove schedules?
   class Timer
     attr_reader :schedule, :default
